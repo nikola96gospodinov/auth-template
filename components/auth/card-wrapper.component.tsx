@@ -6,7 +6,7 @@ import { Header } from "./header.component";
 import { Social } from "./social.component";
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   headerLabel: string;
   backButtonLabel: string;
   backButtonHref: string;
