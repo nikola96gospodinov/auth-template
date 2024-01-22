@@ -5,6 +5,9 @@ import { z } from "zod";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/utils/tokens.utils";
+import { getUserByEmail } from "@/utils/db/user.utils";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -17,6 +20,25 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedFields.data;
+
+  const existingUser = await getUserByEmail(email);
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return {
+      status: "error",
+      message: "Email does not exist",
+    };
+  }
+
+  if (!existingUser.emailVerified) {
+    await generateVerificationToken(existingUser.email);
+    await sendVerificationEmail(existingUser.email, existingUser.email);
+
+    return {
+      status: "warning",
+      message: "Please verify your email address",
+    };
+  }
 
   try {
     await signIn("credentials", {

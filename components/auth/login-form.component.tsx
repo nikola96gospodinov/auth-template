@@ -22,6 +22,7 @@ import { Button } from "../ui/button";
 import { FormError } from "../form-error.component";
 import { FormSuccess } from "../form-success.component";
 import { login } from "@/actions/login.action";
+import { FormWarning } from "../form-warning.component";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -104,6 +105,10 @@ export const LoginForm = () => {
 
           {(response?.status === "error" || urlErrorText) && (
             <FormError message={response?.message ?? urlErrorText} />
+          )}
+
+          {response?.status === "warning" && (
+            <FormWarning message={response.message} />
           )}
 
           {response?.status === "success" && (
