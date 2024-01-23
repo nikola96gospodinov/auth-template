@@ -7,6 +7,7 @@ export const authRoutes = [
   "/auth/register",
   "/auth/error",
   "/auth/reset",
+  "/auth/new-password",
 ];
 
 // Routes that start with this prefix are used for API authentication
