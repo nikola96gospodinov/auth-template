@@ -2,7 +2,12 @@
 export const publicRoutes = ["/", "/auth/new-verification"];
 
 // Routes used for authentication
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/error",
+  "/auth/reset",
+];
 
 // Routes that start with this prefix are used for API authentication
 export const apiAuthPrefix = "/api/auth";

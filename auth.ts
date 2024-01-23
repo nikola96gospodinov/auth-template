@@ -33,7 +33,7 @@ export const {
         data: { emailVerified: new Date() },
       });
     },
-  },
+  }, // TODO: Go back to this to understand what it does
   callbacks: {
     async signIn({ user, account }) {
       // Allow OAuth without email verification
