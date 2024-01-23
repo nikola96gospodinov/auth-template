@@ -31,8 +31,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   if (!existingUser.emailVerified) {
-    await generateVerificationToken(existingUser.email);
-    await sendVerificationEmail(existingUser.email, existingUser.email);
+    const verificationToken = await generateVerificationToken(
+      existingUser.email
+    );
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     return {
       status: "warning",
