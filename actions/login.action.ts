@@ -61,14 +61,14 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       if (!twoFactorToken) {
         return {
           status: "error",
-          message: "Invalid code!",
+          message: "Invalid code",
         };
       }
 
       if (twoFactorToken.token !== code) {
         return {
           status: "error",
-          message: "Invalid code!",
+          message: "Invalid code",
         };
       }
 
@@ -77,7 +77,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       if (hasExpired) {
         return {
           status: "error",
-          message: "Code has expired!",
+          message: "Code has expired",
         };
       }
 

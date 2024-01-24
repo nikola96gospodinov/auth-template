@@ -59,7 +59,8 @@ export const LoginForm = () => {
 
   const showTwoFactor =
     response?.message === "Please enter your two-factor authentication code" ||
-    response?.message === "Invalid code!";
+    response?.message === "Invalid code" ||
+    response?.message === "Code has expired";
 
   return (
     <CardWrapper
