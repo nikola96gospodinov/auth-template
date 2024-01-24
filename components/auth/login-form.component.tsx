@@ -57,6 +57,10 @@ export const LoginForm = () => {
     });
   };
 
+  const showTwoFactor =
+    response?.message === "Please enter your two-factor authentication code" ||
+    response?.message === "Invalid code!";
+
   return (
     <CardWrapper
       headerLabel="Welcome Back"
@@ -67,42 +71,68 @@ export const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="john.doe@example.com"
-                      disabled={isPending}
-                      type="email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {showTwoFactor && (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Two Factor Code</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="123456"
+                        disabled={isPending}
+                        type="number"
+                        min={100_000}
+                        max={999_999}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {!showTwoFactor && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="john.doe@example.com"
+                          disabled={isPending}
+                          type="email"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="********"
-                      type="password"
-                      disabled={isPending}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="********"
+                          type="password"
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
 
             <Button
               size="sm"
@@ -128,7 +158,7 @@ export const LoginForm = () => {
           )}
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            Login
+            {showTwoFactor ? "Confirm" : "Login"}
           </Button>
         </form>
       </Form>
