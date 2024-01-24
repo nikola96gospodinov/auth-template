@@ -7,8 +7,9 @@ import authConfig from "./auth.config";
 import { UserRole } from "@prisma/client";
 import { getTwoFactorConfirmationByUserId } from "./utils/db/two-factor-confirmation.utils";
 
-type ExtendedUser = DefaultSession["user"] & {
+export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
+  isTwoFactorEnabled: boolean;
 };
 
 declare module "next-auth" {
@@ -64,6 +65,9 @@ export const {
       if (token.role && session.user)
         session.user.role = token.role as UserRole;
 
+      if (session.user)
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+
       return session;
     },
     async jwt({ token }) {
@@ -74,6 +78,7 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
